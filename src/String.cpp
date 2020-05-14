@@ -2,24 +2,38 @@
 
 hoft::String::String()
 {
-	this->data = nullptr;
+	if(this->data != nullptr)
+	{
+		delete[] this->data;
+	}
 }
 
 hoft::String::String(const hoft::String &s)
 {
+	if(this->data != nullptr)
+	{
+		delete[] this->data;
+	}
 	this->data = new char[s.getLen()+1];
 	strcpy(this->data,s.getData());
 }
 
 hoft::String::String(const char* s)
 {
+	if(this->data != nullptr)
+	{
+		delete[] this->data;
+	}
 	this->data = new char[strlen(s)+1];
 	strcpy(this->data,s);
 }
 
 hoft::String::~String()
 {
-	delete[] data;
+	if(this->data != nullptr)
+	{
+		delete[] this->data;
+	}
 }
 
 unsigned long hoft::String::getLen() const
@@ -44,6 +58,10 @@ void hoft::String::insert(const hoft::String &s, unsigned long pos)
 
 hoft::String hoft::String::operator= (const char* s)
 {
+	if(this->data != nullptr)
+	{
+		delete[] this->data;
+	}
 	this->data = new char[strlen(s)+1];
 	strcpy(this->data,s);
 }
@@ -51,9 +69,11 @@ hoft::String hoft::String::operator= (const char* s)
 hoft::String hoft::operator+(const hoft::String &s1, const hoft::String &s2)
 {
 	char* temp = new char[s1.getLen()+s2.getLen()+1];
-	strcat(temp,s1.getData());
+	strcpy(temp,s1.getData());
 	strcat(temp,s2.getData());
-	return String(temp);
+	String ret(temp);
+	delete[] temp;
+	return ret;
 }
 
 std::ostream& hoft::operator<< (std::ostream &out, const hoft::String &s)
